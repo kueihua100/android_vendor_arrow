@@ -20,7 +20,7 @@ PRODUCT_PACKAGES += \
     Calendar \
     ExactCalculator \
     LatinIME \
-    Launcher3QuickStep \
+    Launcher3_pixel \
     messaging \
     OmniJaws \
     Phonograph \
