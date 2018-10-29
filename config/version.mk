@@ -13,26 +13,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARROW_MOD_VERSION = v9.0
+IS_GOOGLE_DOG=yes
 
-ifndef ARROW_BUILD_TYPE
+ifeq ($(IS_GOOGLE_DOG), yes)
+  ARROW_MOD_VERSION = Pie
+  ARROW_BUILD_TYPE := BETA
+  CURRENT_DEVICE=$(shell echo "$(TARGET_PRODUCT)" | cut -d'_' -f 2,3)
+  ARROW_VERSION := $(CURRENT_DEVICE)-$(ARROW_MOD_VERSION)-$(shell date -u +%Y%m%d)-$(ARROW_BUILD_TYPE)
+else
+  ARROW_MOD_VERSION = v9.0
+
+  ifndef ARROW_BUILD_TYPE
     ARROW_BUILD_TYPE := UNOFFICIAL
-endif
+  endif
 
-ifeq ($(ARROW_BETA),true)
+  ifeq ($(ARROW_BETA),true)
     ARROW_BUILD_TYPE := BETA
-endif
+  endif
 
-CURRENT_DEVICE=$(shell echo "$(TARGET_PRODUCT)" | cut -d'_' -f 2,3)
+  CURRENT_DEVICE=$(shell echo "$(TARGET_PRODUCT)" | cut -d'_' -f 2,3)
 
-ifdef ARROW_OFFICIAL
+  ifdef ARROW_OFFICIAL
    LIST = $(shell curl -s https://raw.githubusercontent.com/ArrowOS/android_vendor_arrow/arrow-9.x/arrow.devices)
    FOUND_DEVICE =  $(filter $(CURRENT_DEVICE), $(LIST))
     ifeq ($(FOUND_DEVICE),$(CURRENT_DEVICE))
       IS_OFFICIAL=true
       ARROW_BUILD_TYPE := OFFICIAL
 
-PRODUCT_PACKAGES += \
+  PRODUCT_PACKAGES += \
     Updater
 
     endif
@@ -40,9 +48,9 @@ PRODUCT_PACKAGES += \
        ARROW_BUILD_TYPE := UNOFFICIAL
        $(error Device is not official "$(FOUND)")
     endif
+  endif
+  ARROW_VERSION := Arrow-$(ARROW_MOD_VERSION)-$(CURRENT_DEVICE)-$(ARROW_BUILD_TYPE)-$(shell date -u +%Y%m%d)
 endif
-
-ARROW_VERSION := Arrow-$(ARROW_MOD_VERSION)-$(CURRENT_DEVICE)-$(ARROW_BUILD_TYPE)-$(shell date -u +%Y%m%d)
 
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
   ro.arrow.version=$(ARROW_VERSION) \
