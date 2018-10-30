@@ -13,9 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-IS_GOOGLE_DOG=yes
+IS_FRFISH=yes
 
-ifeq ($(IS_GOOGLE_DOG), yes)
+ifeq ($(IS_FRFISH), yes)
   ARROW_MOD_VERSION = Pie
   ARROW_BUILD_TYPE := BETA
   CURRENT_DEVICE=$(shell echo "$(TARGET_PRODUCT)" | cut -d'_' -f 2,3)
