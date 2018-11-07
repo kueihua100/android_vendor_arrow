@@ -331,6 +331,9 @@ def main():
 
     product = sys.argv[1]
     device = product[product.find("_") + 1:] or product
+    print("device= %s, product= %s" % (device, product))
+    ## no need to fetch kenzo code, always exist
+    sys.exit()
 
     if depsonly:
         repo_path = get_from_manifest(device)
